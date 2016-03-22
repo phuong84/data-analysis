@@ -1,0 +1,16 @@
+ANALYSIS MODE : TALLY COMPARISON
+File Name     : tally_test, tally_test
+Tally Number  : 45, 65
+Make Plot     : true
+Plot Folder   : plots
+Plot Format   : pdf
+Plot Style    : L
+Plot Color    : Cyan
+Line Width    : 2.
+X Title       : Energy (MeV)
+Y Title       : Arbitrary unit
+Log Scale     : false
+Grid          : false
+Smooth        : true
+Show Ratio    : false
+

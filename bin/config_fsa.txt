@@ -1,0 +1,13 @@
+# DOC PHO
+MEASUREMENT SPECTRA : phochuan.TKA 
+CALIBRATION SPECTRA : U-740.TKA , Th-690.TKA , K-825.TKA 
+CHANNEL NUMBER      : 8192 
+
+# VE PHO
+SINGLE PLOT         : phochuan 
+MULTI PLOT          : U-740 , Th-690 , K-825 
+HISTOGRAM LIST      : phochuan , U-740 , Th-690 , K-825 
+
+LogScale : 1 
+
+# PHAN TICH PHO

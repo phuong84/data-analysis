@@ -1,0 +1,6 @@
+ANALYSIS MODE : PTRAC
+File Name     : ptrac_test
+Filter        : false
+Selection     : 1.
+
+
