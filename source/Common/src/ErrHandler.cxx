@@ -28,7 +28,7 @@ void ErrHandler::warn(TString message)
 {
 	if(debug_level >= 1) {
 		if(WINSYS)	std::cout << ">>> WARN  ";
-		else		std::cout << "\033[34mWARN  \033[0m";
+		else		std::cout << "\033[1;33mWARN  \033[0m";
 		std::cout << std::resetiosflags(std::ios::adjustfield);
 		std::cout << std::setiosflags(std::ios::left);
 		std::cout << std::setw(12) << m_label << " : " << message << std::endl;
@@ -60,7 +60,7 @@ void ErrHandler::debug(TString message, int line)
 {
 	if(debug_level >= 3) {
 		if(WINSYS)	std::cout << "... DEBUG  ";
-		else		std::cout << "DEBUG ";
+		else		std::cout << "\033[1;37mDEBUG \033[0m";
 		std::cout << std::resetiosflags(std::ios::adjustfield);
 		std::cout << std::setiosflags(std::ios::left);
 		std::cout << std::setw(12) << m_label << " : " << message << "   @line " << line << std::endl;
