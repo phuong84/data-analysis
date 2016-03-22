@@ -101,7 +101,7 @@ void HistoUtilities::writeHistos(std::vector<TH1*> hist, TFile* file)
 TH1F* HistoUtilities::convert(TString name, TString title, std::vector<double> data, double min, double max)
 {
 	TH1F* hist = 0;
-	if(data.size() < 2) {
+	if(data.size() < 1) {
 		ERROR("Not have enough data to create TH1 histogram");
 		return hist;
 	}
@@ -124,7 +124,7 @@ TH1F* HistoUtilities::convert(TString name, TString title, std::vector<double> d
 TH2F* HistoUtilities::convert(TString name, TString title, std::vector< std::vector<double> > data, double xmin, double xmax, double ymin, double ymax)
 {
 	TH2F* hist = 0;
-	if(data.size() < 2) {
+	if(data.size() < 1) {
 		ERROR("Not have enough data to create TH2 histogram");
 		return hist;
 	}
@@ -150,8 +150,8 @@ TH2F* HistoUtilities::convert(TString name, TString title, std::vector< std::vec
 TH3F* HistoUtilities::convert(TString name, TString title, std::vector< std::vector< std::vector<double> > > data, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)
 {
 	TH3F* hist = 0;
-	if(data.size() < 2) {
-		ERROR("Not have enough data to create TH2 histogram");
+	if(data.size() < 1) {
+		ERROR("Not have enough data to create TH3 histogram");
 		return hist;
 	}
 	if(xmax <= xmin || ymax <= ymin || zmax <= zmin) {
