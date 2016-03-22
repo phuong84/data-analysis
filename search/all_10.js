@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['s_5fevent',['s_event',['../class_ptrac_event.html#a1c17874eaf3ff54f752ffe7cd05a7ed9',1,'PtracEvent']]],
+  ['scale',['scale',['../class_spectrum.html#a4e0359df5b7b87b4ca808f519e57c614',1,'Spectrum']]],
+  ['setcalibcoeff',['setCalibCoeff',['../class_spectrum.html#a2c30fa2682fa295ad38c3ffea92beaec',1,'Spectrum']]],
+  ['setcalibspectra',['setCalibSpectra',['../class_base_fitter.html#ad108d663d598aa7cdbc6f03983ee103d',1,'BaseFitter']]],
+  ['setdata',['setData',['../class_minuit_fitter.html#a6e395da53252a746c2f951c88ca7e2b7',1,'MinuitFitter']]],
+  ['seteffcoeff',['setEffCoeff',['../class_spectrum.html#ad0e52647a12104aa94abbe1488d6464b',1,'Spectrum']]],
+  ['setnbins',['setNbins',['../class_minuit_fitter.html#a21ad537ce1f43b0f28b5af277251bb8a',1,'MinuitFitter']]],
+  ['setnpars',['setNpars',['../class_minuit_fitter.html#a41f6510053ba39d97d7faa9f48706c90',1,'MinuitFitter']]],
+  ['setparameters',['setParameters',['../class_base_fitter.html#aee9444680ed4bf0684e83931f36055fa',1,'BaseFitter::setParameters()'],['../class_g_a_fitter.html#a1445bac74dde21986187a32e1667d0ad',1,'GAFitter::setParameters()'],['../class_t_spectrum_fitter.html#a8c21f7aca8ecbbd4076748b89315adb1',1,'TSpectrumFitter::setParameters()']]],
+  ['setplotstyle',['setPlotStyle',['../class_plotter.html#a7c8514bd3b0610b8699b3df3f477bca6',1,'Plotter']]],
+  ['setstyle',['setStyle',['../class_plotter.html#a720298d9beba457855b200f315bb8b17',1,'Plotter']]],
+  ['show',['Show',['../class_ptrac_selector.html#a076c2f73c81ae48c1dacb47446dd47f8',1,'PtracSelector']]],
+  ['sourcetype',['SourceType',['../class_ptrac_selector.html#a6ed2da16a58b62144006b83340ca2111',1,'PtracSelector']]],
+  ['spectrum',['Spectrum',['../class_spectrum.html',1,'Spectrum'],['../class_spectrum.html#a8054560d9390ac9eb847b4438d4b6eef',1,'Spectrum::Spectrum()']]],
+  ['spectrum_2ecxx',['Spectrum.cxx',['../_spectrum_8cxx.html',1,'']]],
+  ['spectrum_2eh',['Spectrum.h',['../_spectrum_8h.html',1,'']]],
+  ['spectrum_20analysis',['Spectrum Analysis',['../group___spectrum_analysis.html',1,'']]],
+  ['spectrumanalysis_2ecxx',['SpectrumAnalysis.cxx',['../_spectrum_analysis_8cxx.html',1,'']]],
+  ['src',['SRC',['../_ptrac_parser_8h.html#a4f7461a96f9dbfc004a8d326e321c33d',1,'PtracParser.h']]],
+  ['stringparser',['StringParser',['../class_string_parser.html',1,'StringParser'],['../class_string_parser.html#a97c4b4417df4654063fabd220456c133',1,'StringParser::StringParser()']]],
+  ['stringparser_2ecxx',['StringParser.cxx',['../_string_parser_8cxx.html',1,'']]],
+  ['stringparser_2eh',['StringParser.h',['../_string_parser_8h.html',1,'']]],
+  ['subtractbkg',['subtractBkg',['../class_spectrum.html#ae8b58d10e474b88c4e052cb4d7541042',1,'Spectrum']]],
+  ['sur',['SUR',['../_ptrac_parser_8h.html#abf6c0d0b06d4a1356337a56ed0543260',1,'PtracParser.h']]],
+  ['swap',['swap',['../class_g_a_fitter.html#a5fe6fc299d839ae44e50d6fbd1b2610e',1,'GAFitter']]]
+];
