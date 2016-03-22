@@ -1,4 +1,0 @@
-<map id="BaseFitter" name="BaseFitter">
-<area shape="rect" id="node2" href="$class_g_a_fitter.html" title="Fitting spectrum using genetic algorithm method. " alt="" coords="5,80,76,107"/>
-<area shape="rect" id="node3" href="$class_t_spectrum_fitter.html" title="Fitting spectrum using TSpectrum class. " alt="" coords="100,80,216,107"/>
-</map>

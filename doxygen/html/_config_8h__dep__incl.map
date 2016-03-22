@@ -1,9 +1,0 @@
-<map id="Config.h" name="Config.h">
-<area shape="rect" id="node2" href="$_plotter_8h.html" title="Plotter.h" alt="" coords="175,80,245,107"/>
-<area shape="rect" id="node4" href="$_m_c_n_p_analysis_8cxx.html" title="Contain main function for MCNP analysis module. " alt="" coords="5,155,143,181"/>
-<area shape="rect" id="node5" href="$_spectrum_analysis_8cxx.html" title="Contain main function for Spectrum Analysis module. " alt="" coords="277,155,431,181"/>
-<area shape="rect" id="node6" href="$_table_8h.html" title="Table.h" alt="" coords="321,80,387,107"/>
-<area shape="rect" id="node8" href="$_config_8cxx.html" title="Config.cxx" alt="" coords="411,80,497,107"/>
-<area shape="rect" id="node3" href="$_plotter_8cxx.html" title="Plotter.cxx" alt="" coords="167,155,253,181"/>
-<area shape="rect" id="node7" href="$_table_8cxx.html" title="Table.cxx" alt="" coords="455,155,533,181"/>
-</map>
