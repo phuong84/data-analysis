@@ -1,0 +1,12 @@
+ANALYSIS MODE : MESHTALLY
+File Name     : meshtal_130s, meshtal_1302s
+Projection Plane : XY
+First Bin     : 1
+Last Bin      : 1
+Make Ratio    : true
+Make Plot     : true
+Plot Folder   : plots
+Plot Format   : pdf
+Plot Style    : colz
+X Title       : X(cm)
+Y Title       : Y(cm)
