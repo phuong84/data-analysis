@@ -92,8 +92,12 @@ int main(int argc, char **argv)
 		MESSAGE("Analysis mode HISTO");
 		processHisto(config);
 	}
-	else
+	else {
 		ERROR("Undefined analysis mode!");
+		WARN("May due to the inconsistency between Windows and Linux/Cygwin text file formats.");
+		WARN("If you're using Cygwin, please try to avoid using Notepad/Wordpad for editing config files,");
+		WARN("and use Emacs, Vim, Notepad++,... instead.");
+	}
 
 	/************* END *************/	
 	std::cout << std::endl;
