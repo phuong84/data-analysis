@@ -29,7 +29,7 @@ void TallyReader::read(TString filename)
 	Tag tag = INFO;
 	int n_line = 0;
 	std::string line;
-	while (std::getline(infile, line)) {
+	while(std::getline(infile, line)) {
 		++n_line;
 		if(line.find("1tally ") != std::string::npos && line.find("nps =") != std::string::npos) {
 			tag = TALLYINFO;
@@ -57,7 +57,7 @@ void TallyReader::read(TString filename)
  */
 void TallyReader::process(Tag tag, std::string line)
 {
-	switch(tag){
+	switch(tag) {
 		case INFO:
 			readInfo(line);
 			break;

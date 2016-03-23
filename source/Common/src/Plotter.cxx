@@ -311,7 +311,8 @@ void Plotter::makeFilePlot(TFile* file)
 			MESSAGE("Creating "+filename);
 			canvas->SaveAs(filename);
 			delete canvas;
-		}
+		} else
+			WARN("No histogram found!");
 	}
 }
 

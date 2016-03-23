@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 		processHisto(config);
 	}
 	else
-		MESSAGE("Undefined analysis mode!");
+		ERROR("Undefined analysis mode!");
 
 	/************* END *************/	
 	std::cout << std::endl;

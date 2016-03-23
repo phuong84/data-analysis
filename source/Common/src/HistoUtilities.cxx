@@ -21,6 +21,8 @@ void HistoUtilities::getHistosFromFile(std::vector<TH1*> &histolist, TFile* file
 		obj = key->ReadObj();
 		if (obj->InheritsFrom("TH1"))
 			histolist.push_back( (TH1*)obj );
+		else
+			WARN("No histogram found!");
 	}
 }
 
@@ -44,7 +46,8 @@ void HistoUtilities::getHistosFromFile(std::vector<TH1*> &histolist, std::vector
 					break;
 				}
 			}
-		}
+		} else
+			WARN("No histogram found!");
 	}
 }
 
@@ -66,7 +69,8 @@ void HistoUtilities::mergeHistos(TFile* file)
 				merged = (TH1*)obj->Clone();
 			else
 				merged->Add( (TH1*)obj );
-		}
+		} else
+			WARN("No histogram found!");
 		++i;
 	}
 	merged->SetName("mergedHisto");

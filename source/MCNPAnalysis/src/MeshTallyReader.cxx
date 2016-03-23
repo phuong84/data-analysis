@@ -35,28 +35,27 @@ void MeshTallyReader::read(TString filename)
 	// Open meshtal file for reading
 	std::ifstream infile;
 	infile.open(filename.Data(), std::ifstream::in);
-	if (infile.fail()) {
+	if(infile.fail()) {
 		ERROR("Cannot open file '"+filename+"'");
-	} else {
-	  INFO("Open file '"+filename+"'");
-	}
+	} else
+		INFO("Open file '"+filename+"'");
 
 	// Start to extract information line by line
 	Tag tag = INFO;
 	int n_line = 0;
 	std::string line;
-	while (std::getline(infile, line)) {
+	while( std::getline(infile, line) ) {
 		++n_line;
 		if(line.find(" Tally bin boundaries:") != std::string::npos) {
 			tag = BOUND;
 			continue;
 		}
 		if(line.find("Tally Results:") != std::string::npos) {
-			if (plane == NONE && line.find("X (across) by Y (down)") != std::string::npos)
+			if(plane == NONE && line.find("X (across) by Y (down)") != std::string::npos)
 				plane = XY;
-			if (plane == NONE && line.find("Y (across) by Z (down)") != std::string::npos)
+			if(plane == NONE && line.find("Y (across) by Z (down)") != std::string::npos)
 				plane = YZ;
-			if (plane == NONE && line.find("X (across) by Z (down)") != std::string::npos)
+			if(plane == NONE && line.find("X (across) by Z (down)") != std::string::npos)
 				plane = XZ;
 			tag = VALUE;
 			std::getline(infile, line);
@@ -88,7 +87,7 @@ void MeshTallyReader::read(TString filename)
  */
 void MeshTallyReader::process(Tag tag, std::string line)
 {	
-	switch(tag){
+	switch(tag) {
 		case INFO:
 			readInfo(line);
 			break;
