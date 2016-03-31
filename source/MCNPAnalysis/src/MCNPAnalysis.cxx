@@ -163,6 +163,7 @@ void processTallyComparison(Config* config)
 {
 	std::vector<TString> filelist  = config->getString("File Name"    , ',');
 	std::vector<TString> tallylist = config->getString("Tally Number" , ',');
+	std::vector<TString> legendlist = config->getString("Legend Title" , ',');
 
 	DEBUG( TString::Format( "Number of files = %d", (int)filelist.size() ) );
 	DEBUG( TString::Format( "Number of tallies = %d", (int)tallylist.size() ) );
@@ -174,6 +175,8 @@ void processTallyComparison(Config* config)
 	}
 	if( size != filelist.size() || size != tallylist.size() ) 
 		WARN("Numbers of files and tallies are different!");
+	if( legendlist.size() == 0 ) 
+		WARN("No legend title was set.");
 
 	MESSAGE("Read tally files...");
 	for (int i = 0; i < (int)size; ++i) {
@@ -187,6 +190,10 @@ void processTallyComparison(Config* config)
 		TFile *file = new TFile(filelist[i]+".root");
 		TH1* hist = (TH1*)file->Get("Tally"+tallylist[i]);
 		hist->SetDirectory(0);
+		if( i < (int)legendlist.size() )
+			hist->SetTitle(legendlist[i]);
+		else
+			WARN( TString::Format( "Not setting legend title for %s", hist->GetTitle() ) );
 		histlist.push_back(hist);
 		file->Close();
 	}
