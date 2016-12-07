@@ -1,0 +1,11 @@
+ANALYSIS MODE   : HISTO
+File Name       : PTSim/P2_Sample70.root, PTSim/P2_Sample90.root
+Histogram       : jstEdep
+Z Value         : 0.1, 0.5
+Projection Type : xz
+Z Range         : 1, 100
+Make Comparison : true
+Export To Text  : true
+Title           : 70, 90
+X Title         : Depth
+Y Title         : Energy
