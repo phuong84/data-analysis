@@ -68,7 +68,7 @@ void Plotter::makeSinglePlot(std::vector<TH1*> hist)
  * This method loops on all elements in histogram vector and creates 1 comparison plot
  * by calling #makePlot()
  */
-void Plotter::makeComparisonPlot(std::vector<TH1*> hist) 
+void Plotter::makeComparisonPlot(std::vector<TH1*> hist, std::vector<TString> title) 
 {
 	Color color[] = {Blue, Red, Pink, Cyan, Green, Purple, Yellow, DarkGreen, Grey, LightGreen,
 					DarkRed, Brown, Black};
@@ -104,22 +104,25 @@ void Plotter::makeComparisonPlot(std::vector<TH1*> hist)
 	legend->SetTextSize(0.035);
 	legend->SetFillColor(0);
 	
-	int i = 0;
+	int icol = 0;
 	bool isFirst = true;
 	TString filename;
 	DEBUG( TString::Format( "Size of histogram vector = %d", (int)hist.size() ) );
 	hist[0]->Draw();
-	for (std::vector<TH1*>::iterator hist_it = hist.begin(); hist_it != hist.end(); ++hist_it) {
-		DEBUG( TString::Format( "Histogram name : %s", (*hist_it)->GetName() ) );
+	for (size_t i = 0; i < hist.size(); ++i) {
+		DEBUG( TString::Format( "Histogram name : %s", hist[i]->GetName() ) );
 		if(isFirst)  
-			filename = (*hist_it)->GetName();
-		makePlot(canvas, (*hist_it), color[i], isFirst);
-		legend->AddEntry( (*hist_it), (*hist_it)->GetTitle());
-		isFirst = false;
-		if(color[i] == Black)
-			i = 0;
+			filename = hist[i]->GetName();
+		makePlot(canvas, hist[i], color[icol], isFirst);
+		if(title.size() == hist.size())
+			legend->AddEntry( hist[i], title[i] );
 		else
-			++i;
+			legend->AddEntry( hist[i], hist[i]->GetTitle() );
+		isFirst = false;
+		if(color[icol] == Black)
+			icol = 0;
+		else
+			++icol;
 	}
 	legend->Draw();
 
@@ -147,7 +150,7 @@ void Plotter::makeComparisonPlot(std::vector<TH1*> hist)
 		hist[1]->GetYaxis()->CenterTitle(1);
 		hist[1]->GetYaxis()->SetTitleOffset(0.3);
 
-		for(int i = 1; i < (int)hist.size(); ++i) {
+		for(size_t i = 1; i < hist.size(); ++i) {
 			hist[i]->Divide(hist[0]);
 			if(i==1)
 				hist[i]->Draw(m_ratioStyle);
@@ -174,11 +177,15 @@ void Plotter::makeComparisonPlot(std::vector<TH1*> hist)
 /**
  * This method creates a single histogram plot by calling #makePlot()
  */
-void Plotter::makeHistPlot(TH1* hist)
+void Plotter::makeHistPlot(TH1* hist, TString prefix)
 {
 	TCanvas* canvas = new TCanvas("", "", 0, 0, 700, 500);
 	makePlot(canvas, hist, m_plotColor, true);
-	TString filename = m_plotDir+"/"+TString::Format("%s",hist->GetName())+"."+m_plotFormat;
+	TString filename = m_plotDir+"/";
+	if(prefix == "")
+		filename += TString::Format("%s",hist->GetName())+"."+m_plotFormat;
+	else
+		filename += prefix+"_"+TString::Format("%s",hist->GetName())+"."+m_plotFormat;
 	MESSAGE("Creating "+filename);
 	canvas->SaveAs(filename);
 	delete canvas;
@@ -190,105 +197,19 @@ void Plotter::makeHistPlot(TH1* hist)
  */
 void Plotter::makeHistPlots(std::vector<TH1*> hist)
 {
-	for (std::vector<TH1*>::iterator hist_it = hist.begin(); hist_it != hist.end(); ++hist_it) {
+  for (size_t i = 0; i < hist.size(); ++i) { 
+	 //std::vector<TH1*>::iterator hist_it = hist.begin(); hist_it != hist.end(); ++hist_it) {
 		TCanvas* canvas = new TCanvas("", "", 0, 0, 700, 500);
-		makePlot(canvas, (*hist_it), m_plotColor, true);
-		TString filename = m_plotDir+"/"+TString::Format("%s",(*hist_it)->GetName())+"."+m_plotFormat;
+		makePlot(canvas, hist[i], m_plotColor, true);
+		TH3F* h = (TH3F*)(hist[0])->Clone();
+		h->Draw();
+		TString filename = m_plotDir+"/"+TString::Format("%s",hist[i]->GetName())+"."+m_plotFormat;
 		MESSAGE("Creating "+filename);
 		canvas->SaveAs(filename);
 		delete canvas;
 	}
 }
 
-/***************************************************************************/
-/**
- * This method creates a 1-dimension (axis) projection plot from a 2-dimension histogam 
- * by calling #makePlot()
- */
-void Plotter::makeProj1DPlot(TH2F* hist, TString axis, int firstbin, int lastbin)
-{
-	TCanvas* canvas = new TCanvas("", "", 0, 0, 700, 500);
-	makePlot(canvas, hist);
-	TString filename = m_plotDir+"/"+TString::Format("%s_proj1D_",hist->GetName())+axis+TString::Format("_%d_%d",firstbin,lastbin)+"."+m_plotFormat;
-	MESSAGE("Creating "+filename);
-	canvas->SaveAs(filename);
-	delete canvas;
-}
-
-/***************************************************************************/
-/**
- * This method creates a 1-dimension (axis) projection plot from a 3-dimesion histogam 
- * by calling #makePlot()
- */
-void Plotter::makeProj1DPlot(TH3F* hist, TString axis, int firstbin1, int lastbin1, int firstbin2, int lastbin2)
-{
-	TCanvas* canvas = new TCanvas("", "", 0, 0, 700, 500);
-	makePlot(canvas, hist);
-	TString filename = m_plotDir+"/"+TString::Format("%s_proj1D_",hist->GetName())+axis+TString::Format("_%d_%d_%d_%d",firstbin1,lastbin1,firstbin2,lastbin2)+"."+m_plotFormat;
-	MESSAGE("Creating "+filename);
-	canvas->SaveAs(filename);
-	delete canvas;
-}
-
-/***************************************************************************/
-/**
- * This method creates a 2-dimension (plane) projection plot from a 3-dimension histogam 
- * by calling #makePlot()
- */
-void Plotter::makeProj2DPlot(TH3F* hist, TString plane, int firstbin, int lastbin, double weight)
-{
-	if(lastbin == 0) lastbin = firstbin;
-
-	TH1* hist2D;
-	if (plane == "XY" || plane == "xy" || plane == "YX" || plane == "yx") {
-		hist->GetZaxis()->SetRange(firstbin, lastbin);
-		hist2D = hist->Project3D(plane);
-		hist2D->Scale(weight);
-		hist->GetZaxis()->SetRange(1, hist->GetNbinsZ());
-		if (plane == "XY" || plane == "xy") {
-			hist2D->GetXaxis()->SetTitle( hist->GetYaxis()->GetTitle() );
-			hist2D->GetYaxis()->SetTitle( hist->GetXaxis()->GetTitle() );
-		} else {
-			hist2D->GetXaxis()->SetTitle( hist->GetXaxis()->GetTitle() );
-			hist2D->GetYaxis()->SetTitle( hist->GetYaxis()->GetTitle() );
-		}
-	} else if (plane == "XZ" || plane == "xz" || plane == "ZX" || plane == "zx") {
-		hist->GetYaxis()->SetRange(firstbin, lastbin);
-		hist2D = hist->Project3D(plane);
-		hist2D->Scale(weight);
-		hist->GetYaxis()->SetRange(1, hist->GetNbinsY());
-		if (plane == "XZ" || plane == "xz") {
-			hist2D->GetXaxis()->SetTitle( hist->GetZaxis()->GetTitle() );
-			hist2D->GetYaxis()->SetTitle( hist->GetXaxis()->GetTitle() );
-		} else {
-			hist2D->GetXaxis()->SetTitle( hist->GetXaxis()->GetTitle() );
-			hist2D->GetYaxis()->SetTitle( hist->GetZaxis()->GetTitle() );
-		}
-	} else if (plane == "YZ" || plane == "yz" || plane == "ZY" || plane == "zy") {
-		hist->GetXaxis()->SetRange(firstbin, lastbin);
-		hist2D = hist->Project3D(plane);
-		hist2D->Scale(weight);
-		hist->GetXaxis()->SetRange(1, hist->GetNbinsX());
-		if (plane == "YZ" || plane == "yz") {
-			hist2D->GetXaxis()->SetTitle( hist->GetZaxis()->GetTitle() );
-			hist2D->GetYaxis()->SetTitle( hist->GetYaxis()->GetTitle() );
-		} else {
-			hist2D->GetXaxis()->SetTitle( hist->GetYaxis()->GetTitle() );
-			hist2D->GetYaxis()->SetTitle( hist->GetZaxis()->GetTitle() );
-		}
-	} else {
-		ERROR("Undefined projection plane!");
-		return;
-	}
-	//hist2D->GetZaxis()->SetTitle(m_unit);
-  
-	TCanvas* canvas = new TCanvas("", "", 0, 0, 700, 500);
-	makePlot(canvas,hist2D);
-	TString filename = m_plotDir+"/"+TString::Format("%s_proj2D_",hist->GetName())+plane+TString::Format("_%d_%d",firstbin,lastbin)+"."+m_plotFormat;
-	MESSAGE("Creating "+filename);
-	canvas->SaveAs(filename);
-	delete canvas;
-}
 
 /***************************************************************************/
 /**
@@ -316,6 +237,33 @@ void Plotter::makeFilePlot(TFile* file)
 	}
 }
 
+
+/***************************************************************************/
+/**
+ * This method export a histogram to a text file
+ */
+void Plotter::exportHist2Text(TH1* hist, TString prefix)
+{
+	TString filename = m_plotDir+"/";
+	if(prefix == "")
+		filename += TString::Format("%s",hist->GetName())+".txt";
+	else
+		filename += prefix+"_"+TString::Format("%s",hist->GetName())+".txt";
+	std::ofstream outfile;
+	outfile.open(filename);
+	
+	if(outfile.is_open()) {
+		for(int k = 0; k < hist->GetNbinsZ(); ++k)
+			for(int j = 0; j < hist->GetNbinsY(); ++j)
+				for(int i = 0; i < hist->GetNbinsX(); ++i)
+					outfile << hist->GetBinContent(i+1,j+1,k+1) << std::endl;
+		outfile.close();
+	} else
+		ERROR("Unable to open file '"+filename+"'!"); 
+	
+	return;
+}
+
 /***************************************************************************/
 /**
  * This method creates a plot from an input histograms, checking if the histogram
@@ -323,7 +271,7 @@ void Plotter::makeFilePlot(TFile* file)
  */
 void Plotter::makePlot(TCanvas* canvas, TH1* hist, Color color, bool isFirst) 
 {
-	hist->SetLineColor(color);   
+  	hist->SetLineColor(color);   
 	hist->SetLineWidth(m_lineWidth);
 	hist->SetLineStyle(m_lineStyle);
 	hist->SetMarkerColor(color);   
@@ -341,13 +289,15 @@ void Plotter::makePlot(TCanvas* canvas, TH1* hist, Color color, bool isFirst)
 	}
 
 	if (m_smooth)	hist->Smooth();
-	if(isFirst)	hist->DrawCopy(m_plotStyle);
-	else		hist->DrawCopy("same" + m_plotStyle);
-	if(m_grid)	canvas->SetGrid();
+	if(isFirst)		hist->DrawCopy(m_plotStyle);
+	else			hist->DrawCopy("same" + m_plotStyle);
+	if(m_grid)		canvas->SetGrid();
 	if(m_logscale) {
 		gPad->SetLogy();
 		gPad->RedrawAxis();
 	}
+
+	return;
 }
 
 /***************************************************************************/
@@ -382,8 +332,8 @@ void Plotter::setPlotStyle()
 	gStyle->SetPadLeftMargin(0.08);
 
 	// set title offsets (for axis label)
-	gStyle->SetTitleXOffset(1.4);
-	gStyle->SetTitleYOffset(1.4);
+	gStyle->SetTitleXOffset(1.);
+	gStyle->SetTitleYOffset(1.);
 
 	// use large fonts
 	//Int_t font=72; // Helvetica italics
@@ -395,7 +345,7 @@ void Plotter::setPlotStyle()
 	gStyle->SetLabelFont(font,"xyz");
 	gStyle->SetTitleFont(font,"xyz");
 	gStyle->SetLabelSize(tsize,"xyz");
-	gStyle->SetTitleSize(tsize*1.2,"xyz");
+	//gStyle->SetTitleSize(tsize*1.2,"xyz");
 
 	// use bold lines and markers
 	gStyle->SetMarkerStyle(20);

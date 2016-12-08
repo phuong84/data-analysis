@@ -64,43 +64,26 @@ public:
 
 	/// \brief Create comparison histogam plot
 	/// \param hist vector of histograms
-	void makeComparisonPlot(std::vector<TH1*> hist);
+	/// \param title vector of legends
+	void makeComparisonPlot(std::vector<TH1*> hist, std::vector<TString> title = std::vector<TString>());
 
 	/// \brief Create histogam plot
 	/// \param hist histogram object 
-	void makeHistPlot(TH1* hist);
+	/// \param prefix prefix of output file
+	void makeHistPlot(TH1* hist, TString prefix = "");
 
 	/// \brief Create multiple histogam plot
 	/// \param hist vector of histograms 
 	void makeHistPlots(std::vector<TH1*> hist);
 
-	/// \brief Create 1D projection histogam plot
-	/// \param hist 2D histogram
-	/// \param axis projected axis
-	/// \param firstbin first bin of projection
-	/// \param lastbin last bin of projection
-	void makeProj1DPlot(TH2F* hist, TString axis, int firstbin = 0, int lastbin = 0);
-
-	/// \brief Create 1D projection histogam plot
-	/// \param hist 3D histogram
-	/// \param axis projected axis
-	/// \param firstbin1 first bin of projection
-	/// \param lastbin1 last bin of projection
-	/// \param firstbin2 first bin of projection
-	/// \param lastbin2 last bin of projection
-	void makeProj1DPlot(TH3F* hist, TString axis, int firstbin1 = 0, int lastbin1 = 0, int firstbin2 = 0, int lastbin2 = 0);
-
-	/// \brief Create 2D projection histogam plot
-	/// \param hist 3D histogram
-	/// \param plane projected plane
-	/// \param firstbin first bin of projection
-	/// \param lastbin last bin of projection
-	/// \param weight weight of projection histogram
-	void makeProj2DPlot(TH3F* hist, TString plane, int firstbin = 0, int lastbin = 0, double weight = 1.);
-
 	/// \brief Create all histogams from a file
 	/// \param file pointer to \a TFile object
 	void makeFilePlot(TFile* file);
+	
+	/// \brief Export histogram to text file
+	/// \param hist histogram to be exported
+	/// \param prefix prefix of filename
+	void exportHist2Text(TH1* hist, TString prefix);
 
 	/// \brief List of color used in Plotter class
 	enum Color {

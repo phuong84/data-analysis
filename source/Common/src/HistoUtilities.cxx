@@ -41,13 +41,14 @@ void HistoUtilities::getHistosFromFile(std::vector<TH1*> &histolist, std::vector
 		if (obj->InheritsFrom("TH1")) {
 			for(std::vector<TString>::iterator histoname_it = histoname.begin(); histoname_it != histoname.end(); ++histoname_it) {
 				TString name; name.Form("%s",obj->GetName());
+				DEBUG("Compare '"+name+"' and '"+(*histoname_it)+"'");
 				if( name == (*histoname_it) ) {
 					histolist.push_back( (TH1*)obj );
+					DEBUG("Added histogram '"+name+"'");
 					break;
 				}
 			}
-		} else
-			WARN("No histogram found!");
+		}
 	}
 }
 
@@ -187,12 +188,12 @@ TH3F* HistoUtilities::changeAxis(TH3F* hist, TString option, TString name)
 	int nbinx = hist->GetNbinsX();
 	int nbiny = hist->GetNbinsY();
 	int nbinz = hist->GetNbinsZ();
-	double xmin = hist->GetXaxis()->GetBinLowEdge(0);
-	double xmax = hist->GetXaxis()->GetBinLowEdge(hist->GetNbinsX()) + hist->GetXaxis()->GetBinWidth(0);
-	double ymin = hist->GetYaxis()->GetBinLowEdge(0);
-	double ymax = hist->GetYaxis()->GetBinLowEdge(hist->GetNbinsY()) + hist->GetYaxis()->GetBinWidth(0);
-	double zmin = hist->GetZaxis()->GetBinLowEdge(0);
-	double zmax = hist->GetZaxis()->GetBinLowEdge(hist->GetNbinsZ()) + hist->GetZaxis()->GetBinWidth(0);
+	double xmin = hist->GetXaxis()->GetBinLowEdge(1);
+	double xmax = hist->GetXaxis()->GetBinLowEdge(hist->GetNbinsX()) + hist->GetXaxis()->GetBinWidth(1);
+	double ymin = hist->GetYaxis()->GetBinLowEdge(1);
+	double ymax = hist->GetYaxis()->GetBinLowEdge(hist->GetNbinsY()) + hist->GetYaxis()->GetBinWidth(1);
+	double zmin = hist->GetZaxis()->GetBinLowEdge(1);
+	double zmax = hist->GetZaxis()->GetBinLowEdge(hist->GetNbinsZ()) + hist->GetZaxis()->GetBinWidth(1);
 
 	TH3F* newhist = 0;
 	if (option == "XYZ") {
@@ -243,4 +244,64 @@ TH3F* HistoUtilities::changeAxis(TH3F* hist, TString option, TString name)
 	return newhist;
 }
 
+
 /***************************************************************************/
+/**
+ * This method creates a 1-dimension (axis) projection from a 2-dimension histogam 
+ */
+TH1* HistoUtilities::makeProjection(TH2F* hist, TString axis, std::vector<int> rangeX, std::vector<int> rangeY, std::vector<double> valueX, std::vector<double> valueY, double weight)
+{
+	TH1* hist1D;
+	return hist1D;
+}
+
+/***************************************************************************/
+/**
+ * This method creates a 1- and 2-dimension projection from a 3-dimension histogam 
+ */
+TH1* HistoUtilities::makeProjection(TH3F* hist, TString option, std::vector<int> rangeX, std::vector<int> rangeY, std::vector<int> rangeZ, 
+																std::vector<double> valueX, std::vector<double> valueY, std::vector<double> valueZ, double weight)
+{
+  TH3F* newhist = (TH3F*)makeRange(hist,rangeX,rangeY,rangeZ,valueX,valueY,valueZ);
+  TH1* proj_hist;		
+	if (option.Contains("x") || option.Contains("X") || option.Contains("y") || option.Contains("Y") || option.Contains("z") || option.Contains("Z")) 
+	  proj_hist = newhist->Project3D(option);
+	else
+	  	ERROR("Undefined projection axis or plane!");
+	if(weight < 0)
+	  proj_hist->Scale(1./proj_hist->Integral());
+	else if(weight != 1.)
+	  proj_hist->Scale(weight);
+	
+	return proj_hist;
+}
+
+
+/***************************************************************************/
+
+TH1* HistoUtilities::makeRange(TH1* hist, std::vector<int> rangeX, std::vector<int> rangeY, std::vector<int> rangeZ, std::vector<double> valueX, std::vector<double> valueY, std::vector<double> valueZ)
+{
+	TH1* newhist = (TH1*)hist->Clone();
+		
+	if(rangeX.size() < 1) rangeX.push_back(1);
+	if(rangeX.size() < 2) rangeX.push_back(newhist->GetNbinsX());
+	if(rangeY.size() < 1) rangeY.push_back(1);
+	if(rangeY.size() < 2) rangeY.push_back(newhist->GetNbinsY());
+	if(rangeZ.size() < 1) rangeZ.push_back(1);
+	if(rangeZ.size() < 2) rangeZ.push_back(newhist->GetNbinsZ());
+
+	if(valueX.size() < 1) valueX.push_back( newhist->GetXaxis()->GetBinLowEdge(1) );
+	if(valueX.size() < 2) valueX.push_back( newhist->GetXaxis()->GetBinLowEdge(newhist->GetNbinsX()) + newhist->GetXaxis()->GetBinWidth(1) );
+	if(valueY.size() < 1) valueY.push_back( newhist->GetYaxis()->GetBinLowEdge(1) );
+	if(valueY.size() < 2) valueY.push_back( newhist->GetYaxis()->GetBinLowEdge(newhist->GetNbinsY()) + newhist->GetYaxis()->GetBinWidth(1) );
+	if(valueZ.size() < 1) valueZ.push_back( newhist->GetZaxis()->GetBinLowEdge(1) );
+	if(valueZ.size() < 2) valueZ.push_back( newhist->GetZaxis()->GetBinLowEdge(newhist->GetNbinsZ()) + newhist->GetZaxis()->GetBinWidth(1) );
+		
+	newhist->SetBins(newhist->GetNbinsX(),valueX[0],valueX[1],newhist->GetNbinsY(),valueY[0],valueY[1],newhist->GetNbinsZ(),valueZ[0],valueZ[1]);
+	
+	newhist->GetXaxis()->SetRange(rangeX[0],rangeX[1]);
+	newhist->GetYaxis()->SetRange(rangeY[0],rangeY[1]);
+	newhist->GetZaxis()->SetRange(rangeZ[0],rangeZ[1]);
+	
+	return newhist;
+}

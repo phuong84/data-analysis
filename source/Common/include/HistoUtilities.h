@@ -95,15 +95,53 @@ public:
 	/// \param zmax maximum range of histogram z-axis
 	/// \return 3-dimension histogram
 	TH3F* convert(TString name, TString title, std::vector< std::vector< std::vector<double> > > data, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax);
-	
+
 	/// \brief Rotate 3D histogram
 	/// \param hist 3-dimension histogram
 	/// \param option option for rotation
 	/// \param name name of new histogram
 	/// \return 3-dimension histogram
 	TH3F* changeAxis(TH3F* hist, TString option, TString name);
+
+	/// \brief Create 1D projection histogam 
+	/// \param hist 2D histogram
+	/// \param axis projected axis
+	/// \param rangeX bin range on x-axis
+	/// \param rangeY bin range on y-axis
+	/// \param valueX value range on x-axis
+	/// \param valueY value range on y-axis
+	/// \param weight scale projected histogram
+	/// \return TH1 histogram
+	TH1* makeProjection(TH2F* hist, TString axis, std::vector<int> rangeX, std::vector<int> rangeY, std::vector<double> valueX, std::vector<double> valueY, double weight = 1.);
+
+	/// \brief Create projection histogam
+	/// \param hist 3D histogram
+	/// \param option projected axis or plane
+	/// \param rangeX bin range on x-axis
+	/// \param rangeY bin range on y-axis
+	/// \param rangeZ bin range on z-axis
+	/// \param valueX value range on x-axis
+	/// \param valueY value range on y-axis
+	/// \param valueZ value range on z-axis
+	/// \param weight scale projected histogram
+	/// \return TH1 histogram
+	TH1* makeProjection(TH3F* hist, TString option, std::vector<int> rangeX, std::vector<int> rangeY, std::vector<int> rangeZ, 
+													std::vector<double> valueX, std::vector<double> valueY, std::vector<double> valueZ, double weight = 1.);								
+													
 private:
+	/// \brief Get histogram with user-defined axis ranges 
+	/// \param hist histogram
+	/// \param rangeX bin range on x-axis
+	/// \param rangeY bin range on y-axis
+	/// \param rangeZ bin range on z-axis
+	/// \param valueX value range on x-axis
+	/// \param valueY value range on y-axis
+	/// \param valueZ value range on z-axis
+	/// \return TH1 histogram
+	TH1* makeRange(TH1* hist, std::vector<int> rangeX, std::vector<int> rangeY, std::vector<int> rangeZ, std::vector<double> valueX, std::vector<double> valueY, std::vector<double> valueZ);
+	
 	ErrHandler message;  ///< label of class to print out with message
+	
 };
 
 #endif
