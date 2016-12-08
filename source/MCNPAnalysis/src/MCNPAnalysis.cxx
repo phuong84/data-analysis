@@ -293,18 +293,19 @@ void processMesh(Config* config)
 
 		// make 2D projection plots
 		MESSAGE("Make 2D projection plots...");
+		/*
 		if(plane != "") {
 			for(size_t i = 0; i < firstbinList.size(); ++i) {
 				double weight = 1.;
 				if(doRatio) weight = 1./(lastbinList[i]-firstbinList[i]+1);
 				if(doMerging)
-					plotter.makeProj2DPlot( (TH3F*)histolist[histolist.size()-1], plane, firstbinList[i], lastbinList[i], weight );
+					//plotter.makeProj2DPlot( (TH3F*)histolist[histolist.size()-1], plane, firstbinList[i], lastbinList[i], weight );
 				else
 					for(size_t j = 0; j < histolist.size(); ++j)
-						plotter.makeProj2DPlot( (TH3F*)histolist[j], plane, firstbinList[i], lastbinList[i], weight );
+						//plotter.makeProj2DPlot( (TH3F*)histolist[j], plane, firstbinList[i], lastbinList[i], weight );
 			}
 		}
-		
+		*/
 		/*
 		// make 1D projection plots
 		if(axis != "") {
