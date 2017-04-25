@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 	if (type == "HISTO") {
 		MESSAGE("Analysis mode HISTO");
 		processHisto(config);
-	}
+	} 
 	else {
 		ERROR("Undefined analysis mode!");
 		WARN("May due to the inconsistency between Windows and Linux/Cygwin text file formats.");
@@ -98,15 +98,17 @@ void processHisto(Config* config)
 	std::vector<double> valueY     = config->getDouble("Y Value"         , ',');
 	std::vector<double> valueZ     = config->getDouble("Z Value"         , ',');
 	bool doComparision             = config->get      ("Make Comparison" , false);
+	bool doMerge                   = config->get      ("Merging"         , false);
 	bool doHist2Txt                = config->get      ("Export To Text"  , false);
 	std::vector<TString> title     = config->getString("Title"           , ',');
 	TString titleX                 = config->get      ("Title X"         , "");
 	TString titleY                 = config->get      ("Title Y"         , "");
+	std::vector<double> weight     = config->getDouble("Weights"         , ',');
 
-	std::vector<TH1*> comp_histo;
 	HistoUtilities hutil;
 	Plotter plotter;
 	plotter.setStyle(config);
+	std::vector<TH1*> comp_histo;
 	
 	for(size_t i = 0; i < filename.size(); ++i) {
 		INFO("Reading file '"+filename[i]+"'");
@@ -117,26 +119,49 @@ void processHisto(Config* config)
 			ERROR("Couldn't get any histogam from file '"+filename[i]+"'!");
 			continue;
 		}
+		TString prefix = filename[i];
+		prefix.ReplaceAll("/","_");
+		prefix.ReplaceAll(".root","");
 		if(type != "") {
 			MESSAGE("Making projection plots...");
 			for(size_t j = 0; j < histolist.size(); ++j) {
 				TH1* h = hutil.makeProjection( (TH3F*)histolist[j], type, rangeX, rangeY, rangeZ, valueX, valueY, valueZ );
-				TString prefix = filename[i];
-				prefix.ReplaceAll("/","_");
-				prefix.ReplaceAll(".root","");
-				DEBUG("Prefix: "+prefix);
 				plotter.makeHistPlot(h,prefix);
 				h->SetDirectory(0);
-				comp_histo.push_back(h);
+				if(doComparision)
+					comp_histo.push_back(h);
 				if(doHist2Txt)
 					plotter.exportHist2Text(h,prefix);
+			}
+		} else {
+			MESSAGE("Making plots...");
+			for(size_t j = 0; j < histolist.size(); ++j) {
+				plotter.makeHistPlot(histolist[j],prefix);
+				if(doComparision) {
+					TH1* h = (TH1*)histolist[j]->Clone();
+					h->SetDirectory(0);
+					comp_histo.push_back(h);
+				}
+				if(doHist2Txt)
+					plotter.exportHist2Text(histolist[j],prefix);
 			}
 		}
 		file->Close();
 	}
-	if(type != "" && doComparision) {
+
+	if(doComparision) {
 		MESSAGE("Making comparison plots...");
 		plotter.makeComparisonPlot(comp_histo, title);
+	}
+	if(doMerge) {
+		MESSAGE("Making merged plots...");
+		TH1* sum_histo = (TH1*)comp_histo[0]->Clone();
+		sum_histo->Scale(weight[0]);
+		for(size_t i = 1; i < comp_histo.size(); ++i)
+			sum_histo->Add(comp_histo[i],weight[i]);
+		plotter.makeHistPlot(sum_histo,"sum_histo");
+		if(doHist2Txt)
+			plotter.exportHist2Text(sum_histo,"sum_histo");
 	}
 	
 	return;
